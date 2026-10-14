@@ -14,6 +14,8 @@ public class Calculator {
 
     private String latestOperation = "";
 
+    private boolean awaitingOperand = false;
+
     /**
      * @return den aktuellen Bildschirminhalt als String
      */
@@ -34,6 +36,7 @@ public class Calculator {
         if(screen.equals("0") || latestValue == Double.parseDouble(screen)) screen = "";
 
         screen = screen + digit;
+        awaitingOperand = false;
     }
 
     /**
@@ -48,6 +51,7 @@ public class Calculator {
         screen = "0";
         latestOperation = "";
         latestValue = 0.0;
+        awaitingOperand = false;
     }
 
     /**
@@ -62,6 +66,7 @@ public class Calculator {
     public void pressBinaryOperationKey(String operation)  {
         latestValue = Double.parseDouble(screen);
         latestOperation = operation;
+        awaitingOperand = true;
     }
 
     /**
@@ -94,7 +99,17 @@ public class Calculator {
      * Beim zweimaligem Drücken, oder wenn bereits ein Trennzeichen angezeigt wird, passiert nichts.
      */
     public void pressDotKey() {
-        if(!screen.contains(".")) screen = screen + ".";
+        /*
+            fixed by:
+            Wenn ich eine Kommazahl ohne führende 0 addieren möchte, z.B. 5 + .5, dann muss der Bildschirm auf "0." gesetzt werden, wenn die Kommataste nach einer Operationstaste gedrückt wird.
+            Das klappt so, da awaitingOperand mit jedem Drücken einer Operationstaste gesetzt wird.
+        */
+        if(awaitingOperand) {
+            screen = "0.";
+            awaitingOperand = false;
+        } else if(!screen.contains(".")) {
+            screen = screen + ".";
+        }
     }
 
     /**
