@@ -118,6 +118,12 @@ public class Calculator {
      * und das Ergebnis direkt angezeigt.
      */
     public void pressEqualsKey() {
+        /*
+            fixed by:
+            lt. Javadoc und onlinecalc passiert nichts, wenn keine Operation zuvor gedrückt wurde - early return eingebaut
+            Das klappt so, da latestOperation mit jedem Drücken einer Operationstaste gesetzt wird.
+        */
+        if (latestOperation.isEmpty()) return;
         var result = switch(latestOperation) {
             case "+" -> latestValue + Double.parseDouble(screen);
             case "-" -> latestValue - Double.parseDouble(screen);
