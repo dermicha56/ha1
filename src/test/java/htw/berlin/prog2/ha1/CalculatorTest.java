@@ -90,5 +90,39 @@ class CalculatorTest {
 
 
     //TODO hier weitere Tests erstellen
+
+    @Test
+    @DisplayName("should display result after multiplying two numbers")
+    void testMultiplication() {
+        Calculator calc = new Calculator();
+
+        calc.pressDigitKey(5);
+        calc.pressBinaryOperationKey("x");
+        calc.pressDigitKey(5);
+        calc.pressEqualsKey();
+
+        String expected = "25";
+        String actual = calc.readScreen();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("should display result after appling latest operation multiple times")
+    void testLatestOperation() {
+        Calculator calc = new Calculator();
+
+        calc.pressDigitKey(5);
+        calc.pressBinaryOperationKey("+");
+        calc.pressDigitKey(5);
+        calc.pressEqualsKey();
+        calc.pressEqualsKey();
+        calc.pressEqualsKey();
+
+        String expected = "20";
+        String actual = calc.readScreen();
+
+        assertEquals(expected, actual);
+    }
 }
 
